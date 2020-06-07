@@ -1,0 +1,167 @@
+
+library swlabels;
+
+import 'package:meta/meta.dart';
+import 'dart:ui' as ui show Offset;
+import 'package:spritewidget/spritewidget.dart' as sw show Label, NodeWithSize;
+import 'package:flutter/material.dart' as mat show TextStyle, FontWeight;
+
+class SWLabel extends sw.Label {
+  String name;
+
+  SWLabel(
+      String text,
+      ui.Offset position,
+      [this.name = null]):
+        super(text) {
+    super.position = position;
+  }
+
+  @override
+  String toString() => '{ name: $name, text: $text }';
+}
+
+class SWLabels {
+  final sw.NodeWithSize _parent;
+  final maxCount;
+  final ui.Offset position;
+  final double stepY;
+  double _titleDY;
+  final String title;
+  final List<SWLabel> _labels;
+
+  int get length => _labels.length;
+
+  SWLabels(
+      this._parent, {
+      @required this.maxCount,
+      @required this.position,
+      @required this.stepY,
+      this.title }):
+        assert(_parent != null),
+        assert(maxCount >= 1),
+        assert(position != null),
+        assert(stepY > 0),
+        _labels = List<SWLabel>() {
+    if (title == null) {
+      _titleDY = 0.0;
+    } else {
+      _titleDY = stepY*1.3;
+      final titleLabel = sw.Label(title,
+          textStyle: mat.TextStyle(fontWeight: mat.FontWeight.bold));
+      titleLabel.position = position;
+      _parent.addChild(titleLabel);
+    }
+  }
+
+  /// Возвращает объект как строку
+  @override
+  String toString() => _labels.toString();
+
+  // Если количество строк достигло [maxCount], то первый удаляется, а
+  // координаты остальных сдвигаются вверх.
+  void _scroll() {
+    if (_labels.length > 1 && _labels.length == maxCount) {
+      for (int i = _labels.length - 1; i >= 1; i--) {
+        _labels[i].position = _labels[i - 1].position;
+      }
+      _parent.removeChild(_labels[0]);
+      _labels.removeAt(0);
+    }
+  }
+
+  /// Добавляет пустую строку
+  void skipLine() {
+    _scroll();
+    _labels.add(null);
+  }
+
+  // Координаты SWLabel по индексу в списке
+  ui.Offset _labelOffset(int index) => ui.Offset(
+      position.dx,
+      position.dy + _titleDY + stepY*index);
+
+  // Добавляет строку в конец.
+  //
+  // Если количество строк достигло [maxCount], то список сдвигается вверх,
+  // новое значение помещается в конец, а первое удаляется.
+  void _printWithScroll(
+      String text,
+      String name) {
+    _scroll();
+    final label = SWLabel(text, _labelOffset(_labels.length), name);
+    _labels.add(label);
+    _parent.addChild(label);
+  }
+
+  /// Добавляет строку в конец, при необходимости сдвигая список вверх.
+  ///
+  /// При желании, можно задать имя [name] для значения. Это позволит в
+  /// дальнейшем обращаться к нему по имени. Если имя не задано, или пока ещё не
+  /// имеется в списке, то новая строка добавляется в конец. Если количество
+  /// строк достигло [maxCount], то список сдвигается вверх, новое значение
+  /// помещается в конец, а первое удаляется.
+  ///
+  /// Если же строка с таким именем уже есть в любой позиции, то новая строка не
+  /// добавляется, просто значение с именем [name] заменяется на новое.
+  void print(
+      String text,
+      [String name = null]) {
+    if (name == null) {
+      _printWithScroll(text, null);
+    } else {
+      final label = _labels.firstWhere(
+          (element) => element.name == name,
+          orElse: () => null);
+      if (label == null) {
+        _printWithScroll(text, name);
+      } else {
+        label.text = text;
+      }
+    }
+  }
+
+  // Расширяет список до индекса [rowIndex] и заполняет координаты элеменов
+  void _extend(int rowIndex) {
+    final prevLength = _labels.length;
+    if (rowIndex >= prevLength) {
+      _labels.length = rowIndex + 1;
+      for (int i = prevLength; i < _labels.length; i++) {
+        _labels[i] = SWLabel(null, _labelOffset(i));
+        _parent.addChild(_labels[i]);
+      }
+    }
+  }
+
+  /// Заменяет значение в указанной позиции
+  ///
+  /// При желании, можно задать имя [name] для значения. Это позволит в
+  /// дальнейшем обращаться к нему по имени при помощи метода [print(..)].
+  /// Если задано [name], но в списке такое имя уже есть, то старая
+  /// позиция [rowIndex] сравнивается с новой, и если они отличаются, то
+  /// значение в старой позиции удаляется, и значение помещается в новую
+  /// позицию с присваиванием имени.
+  void printTo(
+      String text,
+      int rowIndex,
+      [String name = null]) {
+    assert(rowIndex >= 0 && rowIndex < maxCount);
+    _extend(rowIndex);
+    if (name == null) { // Если [name] не задан
+      _labels[rowIndex]
+        ..text = text
+        ..name = null;
+    } else { // Если [name] задан
+      final label = _labels.firstWhere(
+          (element) => element.name == name,
+          orElse: () => null);
+      if (label == null) { // Если имени [name] ещё нет в списке
+        _labels[rowIndex]
+          ..text = text
+          ..name = name;
+      } else { // Если уже есть элемент с именем [name]
+        label.text = text;
+      }
+    }
+  }
+}

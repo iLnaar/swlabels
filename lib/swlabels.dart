@@ -2,7 +2,7 @@
 library swlabels;
 
 import 'package:meta/meta.dart';
-import 'dart:ui' as ui show Offset;
+import 'dart:ui' as ui show Offset, Size;
 import 'package:spritewidget/spritewidget.dart' as sw show Label, NodeWithSize;
 import 'package:flutter/material.dart' as mat show TextStyle, FontWeight;
 
@@ -21,10 +21,8 @@ class SWLabel extends sw.Label {
   String toString() => '{ name: $name, text: $text }';
 }
 
-class SWLabels {
-  final sw.NodeWithSize _parent;
+class SWLabels extends sw.NodeWithSize {
   final maxCount;
-  final ui.Offset position;
   final double stepY;
   double _titleDY;
   final String title;
@@ -33,24 +31,25 @@ class SWLabels {
   int get length => _labels.length;
 
   SWLabels(
-      this._parent, {
+      ui.Size size, {
       @required this.maxCount,
-      @required this.position,
+      @required ui.Offset position,
       @required this.stepY,
       this.title }):
-        assert(_parent != null),
         assert(maxCount >= 1),
         assert(position != null),
         assert(stepY > 0),
-        _labels = List<SWLabel>() {
+        _labels = List<SWLabel>(),
+        super(size) {
+    super.position = position;
     if (title == null) {
       _titleDY = 0.0;
     } else {
       _titleDY = stepY*1.3;
       final titleLabel = sw.Label(title,
           textStyle: mat.TextStyle(fontWeight: mat.FontWeight.bold));
-      titleLabel.position = position;
-      _parent.addChild(titleLabel);
+      titleLabel.position = ui.Offset(0, 0);
+      addChild(titleLabel);
     }
   }
 
@@ -65,7 +64,7 @@ class SWLabels {
       for (int i = _labels.length - 1; i >= 1; i--) {
         _labels[i].position = _labels[i - 1].position;
       }
-      _parent.removeChild(_labels[0]);
+      removeChild(_labels[0]);
       _labels.removeAt(0);
     }
   }
@@ -78,8 +77,8 @@ class SWLabels {
 
   // Координаты SWLabel по индексу в списке
   ui.Offset _labelOffset(int index) => ui.Offset(
-      position.dx,
-      position.dy + _titleDY + stepY*index);
+      0,
+      _titleDY + stepY*index);
 
   // Добавляет строку в конец.
   //
@@ -91,7 +90,7 @@ class SWLabels {
     _scroll();
     final label = SWLabel(text, _labelOffset(_labels.length), name);
     _labels.add(label);
-    _parent.addChild(label);
+    addChild(label);
   }
 
   /// Добавляет строку в конец, при необходимости сдвигая список вверх.
@@ -128,7 +127,7 @@ class SWLabels {
       _labels.length = rowIndex + 1;
       for (int i = prevLength; i < _labels.length; i++) {
         _labels[i] = SWLabel(null, _labelOffset(i));
-        _parent.addChild(_labels[i]);
+        addChild(_labels[i]);
       }
     }
   }

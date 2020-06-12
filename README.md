@@ -23,4 +23,4 @@ different ways:
 - at the end of the list without specifying a label name. In this case, as soon as the number of rows reaches the maximum,
 the lines will scroll up. This is a mode resembling a terminal or a log
 
-Для более подробного ознакомления, смотрите пример в репозитории [swlabels_axample](https://github.com/iLnaar/swlabels_example)
+For more details, see the example in the repository [swlabels_axample](https://github.com/iLnaar/swlabels_example)

@@ -1,10 +1,13 @@
 # SWlabels
 
-SWLabels это инструмент для удобной печати текста на объектах [SpriteWidget](https://github.com/spritewidget/spritewidget).
-Очень удобен для использования в следующих случаях:
-- для отладки, когда удобнее информацию видеть прямо на экране, а не в логе или отладчике
-- для временной печати состояния игр (счёт, жизни), пока графика ещё не разработана
+SWLabels is a tool for conveniently printing text on [SpriteWidget](https://github.com/spritewidget/spritewidget) objects
 
-![Alt text](https://raw.githubusercontent.com/iLnaar/swlabels/master/assets/demo.png "Можно задать title")
+It is very convenient for use in the following cases:
+- for debugging when it is more convenient to see information directly on the screen, instead of using logs or a debugger
+- to temporarily display the state of the application (for example, the score and life in games), while the graphics are not yet developed
 
-Вы также можете посмотреть пример использования SWLabels.
+You can also see an [example](https://github.com/iLnaar/swlabels_example) of using SWLabels.
+A screenshot is taken from this example:
+
+![altText](https://raw.githubusercontent.com/iLnaar/swlabels/master/assets/demo.png "SWLabels")
+

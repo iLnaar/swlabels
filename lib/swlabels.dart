@@ -3,35 +3,52 @@ library swlabels;
 
 import 'package:meta/meta.dart';
 import 'dart:ui' as ui show Offset, Size;
-import 'package:spritewidget/spritewidget.dart' as sw show Label, NodeWithSize;
+import 'package:spritewidget/spritewidget.dart' as sw show Label, Node;
 import 'package:flutter/material.dart' as mat show TextStyle, FontWeight;
 
+/// Extension of class [Label](https://pub.dev/documentation/spritewidget/latest/spritewidget/Label-class.html) for the needs of [SWLabels]
 class SWLabel extends sw.Label {
   String name;
 
   SWLabel(
       String text,
       ui.Offset position,
-      [this.name = null]):
+      [this.name]):
         super(text) {
     super.position = position;
   }
-
-  @override
-  String toString() => '{ name: $name, text: $text }';
 }
 
-class SWLabels extends sw.NodeWithSize {
+/// Класс позволяет очень быстро и удобно выводить текстовые метки в [SpriteWidget](https://pub.dev/packages/spritewidget)
+///
+/// Все параметры задаются при вызове конструктора [SWlabels]. Объект класса
+/// представляет собой набор объектов [SWLabel], которые располагаются в столбик.
+/// Метки можно выводить с указанием индекса, а также им можно присваивать имена,
+/// тогда не нужно будет запоминать координаты. Также есть возможность выводить
+/// в стиле терминала, когда весь набор строк будет скроллироваться.
+///
+/// Класс очень удобен для двух целей:
+/// * для отладки, когда удобнее видеть значения сразу на экране
+/// * для быстрого прототипирования игрового интерфейса (очки, жизни), чтобы
+/// временно выводить просто строки, пока графика ещё не разработана
+class SWLabels extends sw.Node {
+  /// Максимальное количество меток
   final maxCount;
+  /// Шаг строк
   final double stepY;
+  // Смещение первой метки от заголовка
   double _titleDY;
+  /// Заголовок
   final String title;
+  // Список всех меток
   final List<SWLabel> _labels;
 
+  /// Количество меток в текущий момент
   int get length => _labels.length;
 
-  SWLabels(
-      ui.Size size, {
+  /// Конструктор объекта [SWLabels]. Позволяет сразу задать необходимые параметры.
+  /// Первый параметр [size] определяет размеры
+  SWLabels({
       @required this.maxCount,
       @required ui.Offset position,
       @required this.stepY,
@@ -39,8 +56,8 @@ class SWLabels extends sw.NodeWithSize {
         assert(maxCount >= 1),
         assert(position != null),
         assert(stepY > 0),
-        _labels = List<SWLabel>(),
-        super(size) {
+        _labels = List<SWLabel>()
+  {
     super.position = position;
     if (title == null) {
       _titleDY = 0.0;
@@ -76,9 +93,7 @@ class SWLabels extends sw.NodeWithSize {
   }
 
   // Координаты SWLabel по индексу в списке
-  ui.Offset _labelOffset(int index) => ui.Offset(
-      0,
-      _titleDY + stepY*index);
+  ui.Offset _labelOffset(int index) => ui.Offset(0, _titleDY + stepY*index);
 
   // Добавляет строку в конец.
   //
@@ -120,8 +135,9 @@ class SWLabels extends sw.NodeWithSize {
     }
   }
 
-  // Расширяет список до индекса [rowIndex] и заполняет координаты элеменов
+  // Расширяет список до индекса [rowIndex] и заполняет координаты элементов
   void _extend(int rowIndex) {
+    assert (rowIndex >= 0 && rowIndex < maxCount);
     final prevLength = _labels.length;
     if (rowIndex >= prevLength) {
       _labels.length = rowIndex + 1;
@@ -162,5 +178,10 @@ class SWLabels extends sw.NodeWithSize {
         label.text = text;
       }
     }
+  }
+
+  void delete() {
+    removeAllChildren();
+    _labels.clear();
   }
 }

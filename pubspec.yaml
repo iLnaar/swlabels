@@ -1,8 +1,9 @@
 name: swlabels
 description: SWLabels package
-version: 0.0.1
-# author: https://t.me/iLnarV
-homepage: https://t.me/iLnarV
+version: 0.0.2
+authors:
+  - iLnar Valeyev
+homepage: https://vk.com/ilnarwh
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

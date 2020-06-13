@@ -1,4 +1,4 @@
-# SWlabels
+# SWLabels
 
 SWLabels is a tool for conveniently printing text on [SpriteWidget](https://github.com/spritewidget/spritewidget) objects
 

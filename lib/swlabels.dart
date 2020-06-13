@@ -11,4 +11,5 @@ import 'dart:ui' as ui show Offset;
 import 'package:spritewidget/spritewidget.dart' as sw show Label, Node;
 import 'package:flutter/material.dart' as mat show TextStyle, FontWeight;
 
+part 'src/swlabel.dart';
 part 'src/sw_labels.dart';

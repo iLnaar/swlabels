@@ -1,18 +1,4 @@
-
 part of swlabels;
-
-/// Extension of class [Label](https://pub.dev/documentation/spritewidget/latest/spritewidget/Label-class.html) for the needs of [SWLabels]
-class SWLabel extends sw.Label {
-  String name;
-
-  SWLabel(
-      String text,
-      ui.Offset position,
-      [this.name]):
-        super(text) {
-    super.position = position;
-  }
-}
 
 /// Класс позволяет очень быстро и удобно выводить текстовые метки в [SpriteWidget](https://pub.dev/packages/spritewidget)
 ///
@@ -29,10 +15,12 @@ class SWLabel extends sw.Label {
 class SWLabels extends sw.Node {
   /// Максимальное количество меток
   final maxCount;
+
   /// Шаг строк
   final double stepY;
   // Смещение первой метки от заголовка
   double _titleDY;
+
   /// Заголовок
   final String title;
   // Список всех меток
@@ -43,21 +31,20 @@ class SWLabels extends sw.Node {
 
   /// Конструктор объекта [SWLabels]. Позволяет сразу задать необходимые параметры.
   /// Первый параметр [size] определяет размеры
-  SWLabels({
-      @required this.maxCount,
+  SWLabels(
+      {@required this.maxCount,
       @required ui.Offset position,
       @required this.stepY,
-      this.title }):
-        assert(maxCount >= 1),
+      this.title})
+      : assert(maxCount >= 1),
         assert(position != null),
         assert(stepY > 0),
-        _labels = List<SWLabel>()
-  {
+        _labels = List<SWLabel>() {
     super.position = position;
     if (title == null) {
       _titleDY = 0.0;
     } else {
-      _titleDY = stepY*1.3;
+      _titleDY = stepY * 1.3;
       final titleLabel = sw.Label(title,
           textStyle: mat.TextStyle(fontWeight: mat.FontWeight.bold));
       titleLabel.position = ui.Offset(0, 0);
@@ -88,15 +75,13 @@ class SWLabels extends sw.Node {
   }
 
   // Координаты SWLabel по индексу в списке
-  ui.Offset _labelOffset(int index) => ui.Offset(0, _titleDY + stepY*index);
+  ui.Offset _labelOffset(int index) => ui.Offset(0, _titleDY + stepY * index);
 
   // Добавляет строку в конец.
   //
   // Если количество строк достигло [maxCount], то список сдвигается вверх,
   // новое значение помещается в конец, а первое удаляется.
-  void _printWithScroll(
-      String text,
-      String name) {
+  void _printWithScroll(String text, String name) {
     _scroll();
     final label = SWLabel(text, _labelOffset(_labels.length), name);
     _labels.add(label);
@@ -113,14 +98,11 @@ class SWLabels extends sw.Node {
   ///
   /// Если же строка с таким именем уже есть в любой позиции, то новая строка не
   /// добавляется, просто значение с именем [name] заменяется на новое.
-  void print(
-      String text,
-      [String name]) {
+  void print(String text, [String name]) {
     if (name == null) {
       _printWithScroll(text, null);
     } else {
-      final label = _labels.firstWhere(
-          (element) => element.name == name,
+      final label = _labels.firstWhere((element) => element.name == name,
           orElse: () => null);
       if (label == null) {
         _printWithScroll(text, name);
@@ -132,7 +114,7 @@ class SWLabels extends sw.Node {
 
   // Расширяет список до индекса [rowIndex] и заполняет координаты элементов
   void _extend(int rowIndex) {
-    assert (rowIndex >= 0 && rowIndex < maxCount);
+    assert(rowIndex >= 0 && rowIndex < maxCount);
     final prevLength = _labels.length;
     if (rowIndex >= prevLength) {
       _labels.length = rowIndex + 1;
@@ -151,25 +133,25 @@ class SWLabels extends sw.Node {
   /// позиция [rowIndex] сравнивается с новой, и если они отличаются, то
   /// значение в старой позиции удаляется, и значение помещается в новую
   /// позицию с присваиванием имени.
-  void printTo(
-      String text,
-      int rowIndex,
-      [String name]) {
+  void printTo(String text, int rowIndex, [String name]) {
     assert(rowIndex >= 0 && rowIndex < maxCount);
     _extend(rowIndex);
-    if (name == null) { // Если [name] не задан
+    if (name == null) {
+      // Если [name] не задан
       _labels[rowIndex]
         ..text = text
         ..name = null;
-    } else { // Если [name] задан
-      final label = _labels.firstWhere(
-          (element) => element.name == name,
+    } else {
+      // Если [name] задан
+      final label = _labels.firstWhere((element) => element.name == name,
           orElse: () => null);
-      if (label == null) { // Если имени [name] ещё нет в списке
+      if (label == null) {
+        // Если имени [name] ещё нет в списке
         _labels[rowIndex]
           ..text = text
           ..name = name;
-      } else { // Если уже есть элемент с именем [name]
+      } else {
+        // Если уже есть элемент с именем [name]
         label.text = text;
       }
     }

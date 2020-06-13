@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.1
+
+* Refactoring
+
+## 0.1.0
+
+* Improvements for publishing
+
+## 0.0.5
+
+* Improvements for publishing
+
+## 0.0.4
+
+* Improvements for publishing
+
 ## 0.0.3
 
 * Added example

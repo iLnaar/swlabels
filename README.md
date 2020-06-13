@@ -6,7 +6,7 @@ It is very convenient for use in the following cases:
 - for debugging when it is more convenient to see information directly on the screen, instead of using logs or a debugger
 - to temporarily display the state of the application (for example, the score and life in games), while the graphics are not yet developed
 
-You can also see an [swlabels_axample](https://github.com/iLnaar/swlabels_example) of using SWLabels.
+You can also see an [swlabels_example](https://github.com/iLnaar/swlabels_example) of using SWLabels.
 A screenshot is taken from this example:
 
 ![altText](https://raw.githubusercontent.com/iLnaar/swlabels/master/assets/demo.png "SWLabels")
@@ -23,4 +23,4 @@ different ways:
 - at the end of the list without specifying a label name. In this case, as soon as the number of rows reaches the maximum,
 the lines will scroll up. This is a mode resembling a terminal or a log
 
-For more details, see the example in the repository [swlabels_axample](https://github.com/iLnaar/swlabels_example)
+For more details, see the example in the repository [swlabels_example](https://github.com/iLnaar/swlabels_example)

@@ -115,7 +115,7 @@ class SWLabels extends sw.Node {
   /// добавляется, просто значение с именем [name] заменяется на новое.
   void print(
       String text,
-      [String name = null]) {
+      [String name]) {
     if (name == null) {
       _printWithScroll(text, null);
     } else {
@@ -154,7 +154,7 @@ class SWLabels extends sw.Node {
   void printTo(
       String text,
       int rowIndex,
-      [String name = null]) {
+      [String name]) {
     assert(rowIndex >= 0 && rowIndex < maxCount);
     _extend(rowIndex);
     if (name == null) { // Если [name] не задан

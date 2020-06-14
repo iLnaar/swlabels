@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+* Improvements for publishing
+
 ## 0.1.1
 
 * Refactoring

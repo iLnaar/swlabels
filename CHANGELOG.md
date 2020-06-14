@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+* Added demo video and link to an example
+
 ## 0.1.2
 
 * Improvements for publishing

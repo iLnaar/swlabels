@@ -1,36 +1,40 @@
+
 part of swlabels;
 
-/// Класс позволяет очень быстро и удобно выводить текстовые метки в [SpriteWidget](https://pub.dev/packages/spritewidget)
+/// The class allows you to quickly and conveniently display text labels
+/// in [SpriteWidget](https://pub.dev/packages/spritewidget)
 ///
-/// Все параметры задаются при вызове конструктора [SWLabels]. Объект класса
-/// представляет собой набор объектов [SWLabel], которые располагаются в столбик.
-/// Метки можно выводить с указанием индекса, а также им можно присваивать имена,
-/// тогда не нужно будет запоминать координаты. Также есть возможность выводить
-/// в стиле терминала, когда весь набор строк будет скроллироваться.
+/// All parameters are set when creating the [SWLabels] object. A class object
+/// is a set of [SWLabel]s, which are arranged in a column. Labels can be
+/// displayed with an index, and they can also be assigned names, then you will
+/// not need to remember the indexes. It is also possible to display in the
+/// style of the terminal when the entire set of lines will be scrolled.
 ///
-/// Класс очень удобен для двух целей:
-/// * для отладки, когда удобнее видеть значения сразу на экране
-/// * для быстрого прототипирования игрового интерфейса (очки, жизни), чтобы
-/// временно выводить просто строки, пока графика ещё не разработана
+/// The class is very convenient for two purposes:
+/// * for debugging, when it is more convenient to see the values immediately
+/// on the screen
+/// * for rapid prototyping of the game interface (scores, lives), to
+/// temporarily display just lines until the graphics are developed
 class SWLabels extends sw.Node {
-  /// Максимальное количество меток
+  /// Maximum number of text labels
   final maxCount;
-
-  /// Шаг строк
+  /// Row step
   final double stepY;
-  // Смещение первой метки от заголовка
+  // Offset first label from header
   double _titleDY;
-
-  /// Заголовок
+  /// Label group title
   final String title;
-  // Список всех меток
+  // All label's list
   final List<SWLabel> _labels;
-
-  /// Количество меток в текущий момент
+  /// Number of labels currently
   int get length => _labels.length;
 
-  /// Конструктор объекта [SWLabels]. Позволяет сразу задать необходимые параметры.
-  /// Первый параметр [size] определяет размеры
+  /// Allows you to immediately set the necessary parameters.
+  ///
+  /// The [maxCount] sets the maximum number of labels. [position] are the
+  /// coordinates. All labels included in the object will be positioned relative
+  /// to them. [stepY] determines which step vertical labels will be placed. If
+  /// you want an object displayed the [title], you can specify it.
   SWLabels(
       {@required this.maxCount,
       @required ui.Offset position,
@@ -52,12 +56,12 @@ class SWLabels extends sw.Node {
     }
   }
 
-  /// Возвращает объект как строку
+  /// Returns an object as a string
   @override
   String toString() => _labels.toString();
 
-  // Если количество строк достигло [maxCount], то первый удаляется, а
-  // координаты остальных сдвигаются вверх.
+  // If the number of rows reaches [maxCount], then the first is deleted,
+  // and the coordinates of the rest are scrolled up.
   void _scroll() {
     if (_labels.length > 1 && _labels.length == maxCount) {
       for (int i = _labels.length - 1; i >= 1; i--) {
@@ -68,19 +72,19 @@ class SWLabels extends sw.Node {
     }
   }
 
-  /// Добавляет пустую строку
+  /// Adds an empty string (skips)
   void skipLine() {
     _scroll();
     _labels.add(null);
   }
 
-  // Координаты SWLabel по индексу в списке
+  // Returns [SWLabel] coordinates by index in a list
   ui.Offset _labelOffset(int index) => ui.Offset(0, _titleDY + stepY * index);
 
-  // Добавляет строку в конец.
+  // Adds a text row to the end.
   //
-  // Если количество строк достигло [maxCount], то список сдвигается вверх,
-  // новое значение помещается в конец, а первое удаляется.
+  // If the number of rows reaches [maxCount], then the list scroll up, the new
+  // value is placed at the end, and the first is deleted.
   void _printWithScroll(String text, String name) {
     _scroll();
     final label = SWLabel(text, _labelOffset(_labels.length), name);
@@ -88,16 +92,15 @@ class SWLabels extends sw.Node {
     addChild(label);
   }
 
-  /// Добавляет строку в конец, при необходимости сдвигая список вверх.
+  /// Adds a text label to the end, moving the list up if necessary.
   ///
-  /// При желании, можно задать имя [name] для значения. Это позволит в
-  /// дальнейшем обращаться к нему по имени. Если имя не задано, или пока ещё не
-  /// имеется в списке, то новая строка добавляется в конец. Если количество
-  /// строк достигло [maxCount], то список сдвигается вверх, новое значение
-  /// помещается в конец, а первое удаляется.
-  ///
-  /// Если же строка с таким именем уже есть в любой позиции, то новая строка не
-  /// добавляется, просто значение с именем [name] заменяется на новое.
+  /// Optionally, you can specify the [name] for the value. This will allow in
+  /// further access him by name. If no name is specified, or not yet is listed,
+  /// then a new label is added to the end. If the quantity lines reached
+  /// [maxCount], then the list scroll up, the new value placed at the end, and
+  /// the first is deleted. If a label with the same name is already in any
+  /// position, then the new label is not is added, just the value with the
+  /// [name] is replaced with a new one.
   void print(String text, [String name]) {
     if (name == null) {
       _printWithScroll(text, null);
@@ -112,7 +115,8 @@ class SWLabels extends sw.Node {
     }
   }
 
-  // Расширяет список до индекса [rowIndex] и заполняет координаты элементов
+  // Expands the list to the index [rowIndex] and fills the coordinates of
+  // the elements
   void _extend(int rowIndex) {
     assert(rowIndex >= 0 && rowIndex < maxCount);
     final prevLength = _labels.length;
@@ -125,38 +129,39 @@ class SWLabels extends sw.Node {
     }
   }
 
-  /// Заменяет значение в указанной позиции
+  /// Replaces the text value at the specified index
   ///
-  /// При желании, можно задать имя [name] для значения. Это позволит в
-  /// дальнейшем обращаться к нему по имени при помощи метода [print(..)].
-  /// Если задано [name], но в списке такое имя уже есть, то старая
-  /// позиция [rowIndex] сравнивается с новой, и если они отличаются, то
-  /// значение в старой позиции удаляется, и значение помещается в новую
-  /// позицию с присваиванием имени.
+  /// Optionally, you can specify the [name] for the label. This will allow in
+  /// further access it by name using the [print] method. If [name] is
+  /// specified, but the name is already in the list, then the old
+  /// the [rowIndex] position is compared to the new one, and if they differ,
+  /// then the value in the old position is deleted and the value is placed in
+  /// the new naming position.
   void printTo(String text, int rowIndex, [String name]) {
     assert(rowIndex >= 0 && rowIndex < maxCount);
     _extend(rowIndex);
     if (name == null) {
-      // Если [name] не задан
+      // if [name] not found
       _labels[rowIndex]
         ..text = text
         ..name = null;
     } else {
-      // Если [name] задан
+      // if [name] specified
       final label = _labels.firstWhere((element) => element.name == name,
           orElse: () => null);
       if (label == null) {
-        // Если имени [name] ещё нет в списке
+        // if the name is not present in list
         _labels[rowIndex]
           ..text = text
           ..name = name;
       } else {
-        // Если уже есть элемент с именем [name]
+        // if label with [name] already in the list
         label.text = text;
       }
     }
   }
 
+  /// Manual destructor. It is recommended to use it before deleting SWLabels
   void delete() {
     removeAllChildren();
     _labels.clear();

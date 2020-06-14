@@ -11,7 +11,7 @@ class SWLabel extends sw.Label {
   /// The [name] property allows you to access a text label by name.
   String name;
 
-  /// The constructor allows you to set the properties of the text label when creating
+  /// Set the properties of the text label when creating
   ///
   /// The [text] parameter is what will be displayed on the screen. Parameter
   /// [position] sets the position inside the [SWLabels]. The [name] parameter

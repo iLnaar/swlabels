@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4
+
+* Fix bad link and add image
+
 ## 0.1.3
 
 * Added demo video and link to an example

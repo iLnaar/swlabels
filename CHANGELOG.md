@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5
+
+* Fix bad link
+
 ## 0.1.4
 
 * Fix bad link and add image

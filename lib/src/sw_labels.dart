@@ -1,4 +1,3 @@
-
 part of swlabels;
 
 /// The class allows you to quickly and conveniently display text labels
@@ -18,14 +17,17 @@ part of swlabels;
 class SWLabels extends sw.Node {
   /// Maximum number of text labels
   final maxCount;
+
   /// Row step
   final double stepY;
   // Offset first label from header
   double _titleDY;
+
   /// Label group title
   final String title;
   // All label's list
   final List<SWLabel> _labels;
+
   /// Number of labels currently
   int get length => _labels.length;
 

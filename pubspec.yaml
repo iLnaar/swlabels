@@ -3,6 +3,7 @@ name: swlabels
 description: SWLabels is a tool for conveniently printing text on SpriteWidget objects
 version: 0.2.0
 homepage: ilnv@mail.ru
+author: iLnar Valayev
 repository: https://github.com/iLnaar/swlabels
 issue_tracker: https://github.com/iLnaar/swlabels/issues
 
